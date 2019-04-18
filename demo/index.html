@@ -23,11 +23,9 @@
   <body>
     <div class="vertical-section-container centered">
       <h3>Basic question-answer demo</h3>
-      <demo-snippet>
-        <template>
-          <question-answer></question-answer>
-        </template>
-      </demo-snippet>
+        <button name="start" onclick="questionAnswer.start()">start</button>
+        <question-answer id="questionAnswer"></question-answer>
+        <button name="close" onclick="questionAnswer.close()">close</button>
     </div>
   </body>
 </html>
