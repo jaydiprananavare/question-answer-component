@@ -52,11 +52,15 @@ class WelcomeGreeting extends PolymerElement {
       });
   }
 
-  constructor() {
-    super();
+  init() {
     this.hide = false;
     this.hideGreeting = true;
     this.hideNextButton = true;
+  }
+
+  constructor() {
+    super();
+    this.init();
   }
 }
 

@@ -20,11 +20,11 @@ class QuestionAnswer extends PolymerElement {
   }
 
   start() {
+    this.init();
     this.hide = false;
-    this.hideErrorMessage = true;
+    this.$.welcomeGreeting.init();
     this.$.welcomeGreeting.greet();
     this.$.welcomeGreeting.hide = false;
-    this.$.questionElement.hide = true;
   }
 
   close() {
@@ -35,6 +35,7 @@ class QuestionAnswer extends PolymerElement {
 
   _changeToAskQuestionStep() {
     this.$.welcomeGreeting.hide = true;
+    this.$.questionElement.init();
     this.$.questionElement.hide = false;
   }
 
@@ -42,9 +43,16 @@ class QuestionAnswer extends PolymerElement {
     this.hideErrorMessage = false;
   }
 
+  init() {
+    this.hide = true;
+    this.$.welcomeGreeting.hide = true;
+    this.hideErrorMessage = true;
+    this.$.questionElement.hide = true;
+  }
+
   ready() {
     super.ready();
-    this.hideErrorMessage = true;
+    this.init();
   }
 }
 

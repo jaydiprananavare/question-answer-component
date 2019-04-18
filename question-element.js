@@ -56,10 +56,15 @@ class QuestionElement extends PolymerElement {
         this.dispatchEvent(new CustomEvent('next-button-clicked'));
     }
 
+    init() {
+       this.hide = true;
+       this.hideNextButton = true;
+       this.question = this.answer = "";
+    }
+
     constructor() {
         super();
-        this.hide = true;
-        this.hideNextButton = true;
+        this.init();
     }
 }
 
