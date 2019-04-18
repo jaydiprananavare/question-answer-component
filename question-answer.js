@@ -1,6 +1,7 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
 import './welcome-greeting.js'
 import './error-message.js'
+import './question-element.js'
 
 class QuestionAnswer extends PolymerElement {
   static get template() {
@@ -12,6 +13,7 @@ class QuestionAnswer extends PolymerElement {
       </style>
       <div hidden$="[[hide]]">
         <welcome-greeting id="welcomeGreeting" on-api-error="_handleApiError" on-next-button-clicked="_changeToAskQuestionStep"></welcome-greeting>
+        <question-element id="questionElement" on-api-error="_handleApiError" on-next-button-clicked="_changeToThankYouStep"></question-element>
         <error-message id="errorMessage"  hide-error-message="[[hideErrorMessage]]"></error-message>
       </div>
     `;
@@ -22,6 +24,7 @@ class QuestionAnswer extends PolymerElement {
     this.hideErrorMessage = true;
     this.$.welcomeGreeting.greet();
     this.$.welcomeGreeting.hide = false;
+    this.$.questionElement.hide = true;
   }
 
   close() {
@@ -32,9 +35,10 @@ class QuestionAnswer extends PolymerElement {
 
   _changeToAskQuestionStep() {
     this.$.welcomeGreeting.hide = true;
+    this.$.questionElement.hide = false;
   }
 
-  _handleApiError(e) {
+  _handleApiError() {
     this.hideErrorMessage = false;
   }
 
