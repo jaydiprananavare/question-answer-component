@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <title>question-answer test</title>
+    <title>thank-you test</title>
 
     <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
     <script src="../node_modules/@polymer/test-fixture/test-fixture.js"></script>
@@ -12,40 +12,42 @@
     <script src="../node_modules/chai/chai.js"></script>
     <script src="../node_modules/wct-mocha/wct-mocha.js"></script>
 
-    <script type="module" src="../question-answer.js"></script>
+    <script type="module" src="../thank-you.js"></script>
   </head>
   <body>
 
     <test-fixture id="BasicTestFixture">
       <template>
-        <question-answer></question-answer>
+        <thank-you id="thankYou"></thank-you>
       </template>
     </test-fixture>
 
     <test-fixture id="ChangedPropertyTestFixture">
       <template>
-        <question-answer prop1="new-prop1"></question-answer>
+        <thank-you id="thankYou" message="Bye bye"></thank-you>
       </template>
     </test-fixture>
 
     <script type="module">
-      suite('question-answer', () => {
+      suite('thank-you component', () => {
 
-        test('instantiating the element with default properties works', () => {
+        test('instantiating the element should show thank you message', () => {
           const element = fixture('BasicTestFixture');
-          assert.equal(element.prop1, 'question-answer');
+          assert.equal(element.message, 'Thank You');
+          assert.equal(element.hide, true);
           const elementShadowRoot = element.shadowRoot;
-          const elementHeader = elementShadowRoot.querySelector('h2');
-          assert.equal(elementHeader.innerHTML, 'Hello question-answer!');
+          const mainDiv = elementShadowRoot.querySelector('h2');
+          assert.equal(mainDiv.innerText, 'Thank You');
         });
 
         test('setting a property on the element works', () => {
-          // Create a test fixture
           const element = fixture('ChangedPropertyTestFixture');
-          assert.equal(element.prop1, 'new-prop1');
+          element.hide = false;
+          assert.equal(element.message, 'Bye bye');
+          assert.equal(element.hide, false);
           const elementShadowRoot = element.shadowRoot;
-          const elementHeader = elementShadowRoot.querySelector('h2');
-          assert.equal(elementHeader.innerHTML, 'Hello new-prop1!');
+          const mainDiv = elementShadowRoot.querySelector('h2');
+          assert.equal(mainDiv.innerText, 'Bye bye');
         });
 
       });

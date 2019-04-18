@@ -18,7 +18,7 @@
 
     <test-fixture id="BasicTestFixture">
       <template>
-        <question-answer></question-answer>
+        <question-answer id="questionAnswer"></question-answer>
       </template>
     </test-fixture>
 
@@ -31,14 +31,18 @@
     <script type="module">
       suite('question-answer', () => {
 
-        test('instantiating the element with default properties works', () => {
+        test('instantiating the element should hide all sub components', () => {
           const element = fixture('BasicTestFixture');
-          assert.equal(element.prop1, 'question-answer');
+          assert.equal(element.hide, true);
+          assert.equal(element.hideErrorMessage, true);
           const elementShadowRoot = element.shadowRoot;
-          const elementHeader = elementShadowRoot.querySelector('h2');
-          assert.equal(elementHeader.innerHTML, 'Hello question-answer!');
-        });
 
+          const welcomeGreeting = elementShadowRoot.querySelector('#welcomeGreeting');
+
+          //assert.equal(welcomeGreeting, '');
+
+        });
+/*
         test('setting a property on the element works', () => {
           // Create a test fixture
           const element = fixture('ChangedPropertyTestFixture');
@@ -47,7 +51,7 @@
           const elementHeader = elementShadowRoot.querySelector('h2');
           assert.equal(elementHeader.innerHTML, 'Hello new-prop1!');
         });
-
+*/
       });
     </script>
 

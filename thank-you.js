@@ -4,13 +4,8 @@ import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
 class ThankYou extends PolymerElement {
   static get template() {
     return html`
-      <style>
-        :host {
-          display: block;
-        }
-      </style>
       <div hidden$="[[hide]]">
-        <h2>Thank You</h2>
+        <h2>[[message]]</h2>
       </div>
     `
   }
