@@ -14,6 +14,19 @@
     </script>
 
     <script type="module" src="../question-answer.js"></script>
+    <script>
+      function startDemo() {
+        document.getElementById('start').style.display = 'none';
+        document.getElementById('close').style.display = 'block';
+        questionAnswer.start();
+      }
+
+      function closeDemo() {
+        document.getElementById('start').style.display = 'block';
+        document.getElementById('close').style.display = 'none';
+        questionAnswer.close();
+      }
+    </script>
 
     <custom-style>
       <style is="custom-style" include="demo-pages-shared-styles">
@@ -21,11 +34,11 @@
     </custom-style>
   </head>
   <body>
-    <div class="vertical-section-container centered">
+    <div class="centered" style="position: relative">
       <h3>Basic question-answer demo</h3>
-        <button name="start" onclick="questionAnswer.start()">start</button>
-        <question-answer id="questionAnswer"></question-answer>
-        <button name="close" onclick="questionAnswer.close()">close</button>
+      <button id="start" onclick="startDemo()">start</button>
+      <question-answer id="questionAnswer"></question-answer>
+      <button id="close" style="display: none; position: absolute; top: 40px; right: 300px;" onclick="closeDemo()">close</button>
     </div>
   </body>
 </html>

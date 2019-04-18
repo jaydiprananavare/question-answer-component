@@ -26,6 +26,8 @@ class QuestionAnswer extends PolymerElement {
 
   close() {
     this.hide = true;
+    this.hideErrorMessage = true;
+    this.$.welcomeGreeting.hide = true;
   }
 
   _changeToAskQuestionStep() {
@@ -36,7 +38,10 @@ class QuestionAnswer extends PolymerElement {
     this.hideErrorMessage = false;
   }
 
-
+  ready() {
+    super.ready();
+    this.hideErrorMessage = true;
+  }
 }
 
 window.customElements.define('question-answer', QuestionAnswer);

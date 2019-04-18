@@ -10,7 +10,7 @@ class WelcomeGreeting extends PolymerElement {
         }
       </style>
       <div hidden$="[[hide]]">
-        <h2>[[greeting]]</h2>
+        <h2 hidden$="[[hideGreeting]]">[[greeting]]</h2>
         <button id="next-button" hidden$="[[hideNextButton]]" on-click="_dispatchNextButtonClicked">Next</button>
       </div>
     `;
@@ -29,11 +29,8 @@ class WelcomeGreeting extends PolymerElement {
   }
 
   _handleError(errorMessage) {
-    this.dispatchEvent(new CustomEvent('api-error', {bubbles: true, composed: true}));
-  }
-
-  _handleError(errorMessage) {
-    this.dispatchEvent(new CustomEvent('api-error', {bubbles: true, composed: true}));
+    this.hideGreeting = true;
+    this.dispatchEvent(new CustomEvent('api-error'));
   }
 
   greet() {
@@ -43,6 +40,7 @@ class WelcomeGreeting extends PolymerElement {
       .then( response => response.json() )
       .then(function(response) {
         self.greeting = response.message;
+        self.hideGreeting = false;
         self.hideNextButton = false;
       })
       .catch(function(err) {
@@ -57,6 +55,7 @@ class WelcomeGreeting extends PolymerElement {
   constructor() {
     super();
     this.hide = false;
+    this.hideGreeting = true;
     this.hideNextButton = true;
   }
 }
