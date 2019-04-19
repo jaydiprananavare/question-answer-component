@@ -20,9 +20,13 @@ class ErrorMessage extends PolymerElement {
       },
       hideErrorMessage: {
         type: Boolean,
-        value: false
+        value: true
       }
     };
+  }
+
+  init() {
+      this.hideErrorMessage = true;
   }
 }
 

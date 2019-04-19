@@ -22,14 +22,8 @@
       </template>
     </test-fixture>
 
-    <test-fixture id="ChangedPropertyTestFixture">
-      <template>
-        <question-answer prop1="new-prop1"></question-answer>
-      </template>
-    </test-fixture>
-
     <script type="module">
-      suite('question-answer', () => {
+      suite('question-answer component', () => {
 
         test('instantiating the element should hide all sub components', () => {
           const element = fixture('BasicTestFixture');
@@ -42,16 +36,6 @@
           //assert.equal(welcomeGreeting, '');
 
         });
-/*
-        test('setting a property on the element works', () => {
-          // Create a test fixture
-          const element = fixture('ChangedPropertyTestFixture');
-          assert.equal(element.prop1, 'new-prop1');
-          const elementShadowRoot = element.shadowRoot;
-          const elementHeader = elementShadowRoot.querySelector('h2');
-          assert.equal(elementHeader.innerHTML, 'Hello new-prop1!');
-        });
-*/
       });
     </script>
 

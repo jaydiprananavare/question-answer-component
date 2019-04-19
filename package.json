@@ -10,6 +10,8 @@
     "@webcomponents/webcomponentsjs": "^2.0.0",
     "chai": "^4.2.0",
     "mocha": "^5.2.0",
+    "sinon": "^2.3.5",
+    "sinon-chai": "^2.10.0",
     "wct-mocha": "^1.0.0"
   }
 }

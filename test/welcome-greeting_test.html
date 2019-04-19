@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>welcome-greeting test</title>
+
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../node_modules/@polymer/test-fixture/test-fixture.js"></script>
+    <script src="../node_modules/mocha/mocha.js"></script>
+    <script src="../node_modules/chai/chai.js"></script>
+    <script src="../node_modules/wct-mocha/wct-mocha.js"></script>
+    <script src="../node_modules/sinon/pkg/sinon.js"></script>
+
+    <script type="module" src="../welcome-greeting.js"></script>
+  </head>
+  <body>
+
+    <test-fixture id="BasicTestFixture">
+      <template>
+        <welcome-greeting></welcome-greeting>
+      </template>
+    </test-fixture>
+
+
+    <script type="module">
+      suite('welcome-greeting component', () => {
+
+        test('instantiating the element, should have empty greeting message and all elements hidden', () => {
+          const element = fixture('BasicTestFixture');
+          assert.equal(element.hide, true);
+          assert.equal(element.hideGreeting, true);
+          assert.equal(element.hideNextButton, true);
+          assert.equal(element.greeting, '');
+
+          const elementShadowRoot = element.shadowRoot;
+
+          const mainDiv = elementShadowRoot.querySelector('div');
+          assert.equal(mainDiv.hidden, true);
+
+          const headingElement = elementShadowRoot.querySelector('#GreetingMessage');
+          assert.equal(headingElement.hidden, true);
+          assert.equal(headingElement.innerHTML, '');
+
+          const nextButton = elementShadowRoot.querySelector('#NextButton');
+          assert.equal(nextButton.hidden, true);
+          assert.equal(nextButton.innerHTML, 'Next');
+
+        });
+
+        test('should fires next-button-clicked event', function(done) {
+          const element = fixture('BasicTestFixture');
+
+          element.addEventListener('next-button-clicked', function(event) {
+            assert.equal(event.detail, 'next button clicked');
+            done();
+          });
+
+          const elementShadowRoot = element.shadowRoot;
+          const nextButton = elementShadowRoot.querySelector('#NextButton');
+          nextButton.click();
+        });
+
+        test('should fires api-error event', function(done) {
+          const element = fixture('BasicTestFixture');
+
+          element.addEventListener('api-error', function(event) {
+            assert.equal(event.detail, 'got error from api');
+            done();
+          });
+
+          element._handleError("got error from api");
+          assert.equal(element.hideGreeting, true);
+        });
+
+        /*test('on calling greet method, it should fetch and show welcome message', async () => {
+          // sinon.stub(window, 'fetch');
+          // window.fetch.returns(Promise.resolve(mockApiResponse({message: 'hello world'})));
+          /!*var apiHelper = new APIHelper();
+          alert(apiHelper)*!/
+          const element = fixture('BasicTestFixture');
+          // sinon.stub(element.getJsonResponse).returns(Promise.resolve({message: 'hello world'}));
+          assert.equal(element.hide, true);
+          assert.equal(element.hideGreeting, true);
+          assert.equal(element.hideNextButton, true);
+          assert.equal(element.greeting, undefined);
+
+          element.greet();
+
+
+          assert.equal(element.greeting, '');
+
+          const elementShadowRoot = element.shadowRoot;
+
+          // const headingElement = elementShadowRoot.querySelector('h2');
+          // assert.equal(headingElement, true);
+          // assert.equal(headingElement.innerText, '');
+        });*/
+
+      });
+    </script>
+
+  </body>
+</html>

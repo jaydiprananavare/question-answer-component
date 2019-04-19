@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>question-element test</title>
+
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../node_modules/@polymer/test-fixture/test-fixture.js"></script>
+    <script src="../node_modules/mocha/mocha.js"></script>
+    <script src="../node_modules/chai/chai.js"></script>
+    <script src="../node_modules/wct-mocha/wct-mocha.js"></script>
+    <script src="../node_modules/sinon/pkg/sinon.js"></script>
+
+    <script type="module" src="../question-element.js"></script>
+  </head>
+  <body>
+
+    <test-fixture id="BasicTestFixture">
+      <template>
+        <question-element hide="false"></question-element>
+      </template>
+    </test-fixture>
+
+
+    <script type="module">
+      suite('question-element component', () => {
+
+        test('instantiating the element, should have empty input box and submit button', () => {
+          const element = fixture('BasicTestFixture');
+          assert.equal(element.hide, true);
+          assert.equal(element.question, '');
+          assert.equal(element.hideNextButton, true);
+
+          const elementShadowRoot = element.shadowRoot;
+
+          const mainDiv = elementShadowRoot.querySelector('div');
+          assert.equal(mainDiv.hidden, true);
+
+          const headingElement = elementShadowRoot.querySelector('button');
+          assert.equal(headingElement.hidden, false);
+          assert.equal(headingElement.innerHTML, 'submit');
+
+          const answerLable = elementShadowRoot.querySelector('label');
+          assert.equal(answerLable.hidden, false);
+          assert.equal(answerLable.innerHTML, '');
+
+          const nextButton = elementShadowRoot.querySelector('#NextButton');
+          assert.equal(nextButton.hidden, true);
+          assert.equal(nextButton.innerHTML, 'Next');
+
+        });
+
+        test('should fires next-button-clicked event', function(done) {
+          const element = fixture('BasicTestFixture');
+
+          element.addEventListener('next-button-clicked', function(event) {
+            assert.equal(event.detail, 'next button clicked');
+            done();
+          });
+
+          const elementShadowRoot = element.shadowRoot;
+          const nextButton = elementShadowRoot.querySelector('#NextButton');
+          nextButton.click();
+        });
+
+        test('should fires api-error event', function(done) {
+          const element = fixture('BasicTestFixture');
+
+          element.addEventListener('api-error', function(event) {
+            assert.equal(event.detail, 'got error from api');
+            done();
+          });
+
+          element._handleError("got error from api");
+          assert.equal(element.hideGreeting, true);
+        });
+
+      });
+    </script>
+
+  </body>
+</html>

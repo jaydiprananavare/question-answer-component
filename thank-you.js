@@ -22,6 +22,10 @@ class ThankYou extends PolymerElement {
       }
     };
   }
+
+  init() {
+    this.hide = true;
+  }
 }
 
 window.customElements.define('thank-you', ThankYou);

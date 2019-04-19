@@ -1,4 +1,5 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
+import {APIHelper} from './APIHelper.js'
 
 
 class WelcomeGreeting extends PolymerElement {
@@ -10,34 +11,24 @@ class WelcomeGreeting extends PolymerElement {
         }
       </style>
       <div hidden$="[[hide]]">
-        <h2 hidden$="[[hideGreeting]]">[[greeting]]</h2>
-        <button id="next-button" hidden$="[[hideNextButton]]" on-click="_dispatchNextButtonClicked">Next</button>
+        <h2 id="GreetingMessage" hidden$="[[hideGreeting]]">[[greeting]]</h2>
+        <button id="NextButton" hidden$="[[hideNextButton]]" on-click="_dispatchNextButtonClicked">Next</button>
       </div>
     `;
   }
 
-  _dispatchNextButtonClicked(e) {
-    this.dispatchEvent(new CustomEvent('next-button-clicked'));
-  }
-
-  _status(response) {
-    if (response.status >= 200 && response.status < 300) {
-      return Promise.resolve(response)
-    } else {
-      return Promise.reject(new Error(response.statusText))
-    }
+  _dispatchNextButtonClicked() {
+    this.dispatchEvent(new CustomEvent('next-button-clicked', {detail : "next button clicked"}));
   }
 
   _handleError(errorMessage) {
     this.hideGreeting = true;
-    this.dispatchEvent(new CustomEvent('api-error'));
+    this.dispatchEvent(new CustomEvent('api-error', {detail: errorMessage}));
   }
 
   greet() {
     var self = this;
-    fetch("http://localhost:9000/welcome")
-      .then( response => self._status(response) )
-      .then( response => response.json() )
+      APIHelper.getJsonResponse('/welcome')
       .then(function(response) {
         self.greeting = response.message;
         self.hideGreeting = false;
@@ -56,6 +47,7 @@ class WelcomeGreeting extends PolymerElement {
     this.hide = true;
     this.hideGreeting = true;
     this.hideNextButton = true;
+    this.greeting = '';
   }
 
   constructor() {

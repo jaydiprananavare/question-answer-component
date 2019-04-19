@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <title>thank-you test</title>
+    <title>error-message test</title>
 
     <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
     <script src="../node_modules/@polymer/test-fixture/test-fixture.js"></script>
@@ -12,55 +12,49 @@
     <script src="../node_modules/chai/chai.js"></script>
     <script src="../node_modules/wct-mocha/wct-mocha.js"></script>
 
-    <script type="module" src="../thank-you.js"></script>
+    <script type="module" src="../error-message.js"></script>
   </head>
   <body>
 
     <test-fixture id="BasicTestFixture">
       <template>
-        <thank-you></thank-you>
+        <error-message></error-message>
       </template>
     </test-fixture>
 
     <test-fixture id="ChangedPropertyTestFixture">
       <template>
-        <thank-you message="Bye bye"></thank-you>
+        <error-message message="got error from api"></error-message>
       </template>
     </test-fixture>
 
     <script type="module">
-      suite('thank-you component', () => {
+      suite('error-message component', () => {
 
-        test('instantiating the element should have thank you message and its should be hidden', () => {
+        test('instantiating the element should have default error message and its should be hidden', () => {
           const element = fixture('BasicTestFixture');
-          assert.equal(element.message, 'Thank You');
-          assert.equal(element.hide, true);
+          assert.equal(element.message, 'something went wrong');
+          assert.equal(element.hideErrorMessage, true);
 
           const elementShadowRoot = element.shadowRoot;
 
-          const mainDiv = elementShadowRoot.querySelector('div');
-          assert.equal(mainDiv.hidden, true);
-
           const headingElement = elementShadowRoot.querySelector('h2');
-          assert.equal(headingElement.hidden, false);
-          assert.equal(headingElement.innerText, 'Thank You');
+          assert.equal(headingElement.hidden, true);
+          assert.equal(headingElement.innerText, 'something went wrong!');
 
         });
 
         test('should change message and visibility on changing element property', () => {
           const element = fixture('ChangedPropertyTestFixture');
-          element.hide = false;
-          assert.equal(element.message, 'Bye bye');
-          assert.equal(element.hide, false);
+          element.hideErrorMessage = false;
+          assert.equal(element.message, 'got error from api');
+          assert.equal(element.hideErrorMessage, false);
 
           const elementShadowRoot = element.shadowRoot;
 
-          const mainDiv = elementShadowRoot.querySelector('div');
-          assert.equal(mainDiv.hidden, false);
-
           const headingElement = elementShadowRoot.querySelector('h2');
           assert.equal(headingElement.hidden, false);
-          assert.equal(headingElement.innerText, 'Bye bye');
+          assert.equal(headingElement.innerText, 'got error from api!');
         });
 
       });

@@ -1,4 +1,5 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js'
+import {APIHelper} from "./APIHelper";
 
 class QuestionElement extends PolymerElement {
     static get template() {
@@ -9,26 +10,18 @@ class QuestionElement extends PolymerElement {
             }
         </style>
         <div hidden$="[[hide]]">
-            <input name="question" value="{{question::input}}" type="string">
-            <button name="submit" on-click="_fetchAnswer">submit</button>
-            <div>
-                <label id="answer">[[answer]]</label>
+            <input value="{{question::input}}" type="string">
+            <button on-click="_fetchAnswer">submit</button>
+            <div id="AnswerDiv">
+                <label>[[answer]]</label>
             </div>
-            <button id="next-button" hidden$="[[hideNextButton]]" on-click="_dispatchNextButtonClicked">Next</button>
+            <button id="NextButton" hidden$="[[hideNextButton]]" on-click="_dispatchNextButtonClicked">Next</button>
         </div>
       `
     }
 
-    _status(response) {
-        if (response.status >= 200 && response.status < 300) {
-            return Promise.resolve(response)
-        } else {
-            return Promise.reject(new Error(response.statusText))
-        }
-    }
-
-    _handleError() {
-        this.dispatchEvent(new CustomEvent('api-error'));
+    _handleError(errorMessage) {
+        this.dispatchEvent(new CustomEvent('api-error', {detail: errorMessage}));
     }
 
     _fetchAnswer() {
@@ -40,9 +33,8 @@ class QuestionElement extends PolymerElement {
             },
             'body': this.question
         };
-        fetch('http://localhost:9000/query', requestOptions)
-            .then(response => self._status(response))
-            .then(response => response.json())
+
+        APIHelper.getJsonResponse('/query', requestOptions)
             .then(function (response) {
                 self.answer = response.answer;
                 self.hideNextButton = false;
@@ -53,7 +45,7 @@ class QuestionElement extends PolymerElement {
     }
 
     _dispatchNextButtonClicked() {
-        this.dispatchEvent(new CustomEvent('next-button-clicked'));
+        this.dispatchEvent(new CustomEvent('next-button-clicked', {detail : "next button clicked"}));
     }
 
     init() {

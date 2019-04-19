@@ -36,14 +36,15 @@ class QuestionAnswer extends PolymerElement {
   }
 
   _changeToAskQuestionStep() {
-    this.$.welcomeGreeting.hide = true;
-    this.$.questionElement.init();
+    this.init();
+    this.hide = false;
     this.$.questionElement.hide = false;
   }
 
   _changeToThankYouStep() {
-     this.$.questionElement.hide = true;
-     this.$.thankYou.hide = false;
+    this.init();
+    this.hide = false;
+    this.$.thankYou.hide = false;
   }
 
   _handleApiError() {
@@ -52,10 +53,11 @@ class QuestionAnswer extends PolymerElement {
 
   init() {
     this.hide = true;
+    this.hideErrorMessage = true;
     this.$.welcomeGreeting.init();
     this.$.questionElement.init();
-    this.$.thankYou.hide = true;
-    this.hideErrorMessage = true;
+    this.$.thankYou.init();
+    this.$.errorMessage.init();
   }
 
   ready() {
