@@ -33,11 +33,12 @@ class WelcomeGreeting extends PolymerElement {
         self.greeting = response.message;
         self.hideGreeting = false;
         self.hideNextButton = false;
+        self.hide = false;
       })
       .catch(function(err) {
         if(err) {
-          self._handleError(err);
           self.hideNextButton = true;
+          self._handleError(err);
           console.log('Fetch Error :-S', err);
         }
       });

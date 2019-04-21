@@ -26,7 +26,6 @@ class QuestionAnswer extends PolymerElement {
     this.hide = false;
     this.$.welcomeGreeting.init();
     this.$.welcomeGreeting.greet();
-    this.$.welcomeGreeting.hide = false;
   }
 
   close() {

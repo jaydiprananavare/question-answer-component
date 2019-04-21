@@ -25,7 +25,16 @@
 
 
     <script type="module">
+      import {APIHelper} from '../APIHelper.js'
+
       suite('welcome-greeting component', () => {
+
+        var apiStub;
+
+        suiteSetup(() => {
+            apiStub = sinon.stub(APIHelper, 'getJsonResponse');
+        });
+
 
         test('instantiating the element, should have empty greeting message and all elements hidden', () => {
           const element = fixture('BasicTestFixture');
@@ -74,29 +83,68 @@
           assert.equal(element.hideGreeting, true);
         });
 
-        /*test('on calling greet method, it should fetch and show welcome message', async () => {
-          // sinon.stub(window, 'fetch');
-          // window.fetch.returns(Promise.resolve(mockApiResponse({message: 'hello world'})));
-          /!*var apiHelper = new APIHelper();
-          alert(apiHelper)*!/
+        test('on calling greet method, it should fetch and show welcome message', (done) => {
+
+          apiStub.returns(Promise.resolve({message: 'hello world'}));
+
           const element = fixture('BasicTestFixture');
-          // sinon.stub(element.getJsonResponse).returns(Promise.resolve({message: 'hello world'}));
           assert.equal(element.hide, true);
           assert.equal(element.hideGreeting, true);
           assert.equal(element.hideNextButton, true);
-          assert.equal(element.greeting, undefined);
+          assert.equal(element.greeting, '');
 
           element.greet();
 
+          flush(() => {
+            const elementShadowRoot = element.shadowRoot;
 
+            const mainDiv = elementShadowRoot.querySelector('div');
+            assert.equal(mainDiv.hidden, false);
+
+            const headingElement = elementShadowRoot.querySelector('#GreetingMessage');
+            assert.equal(headingElement.hidden, false);
+            assert.equal(headingElement.innerHTML, 'hello world');
+
+            const nextButton = elementShadowRoot.querySelector('#NextButton');
+            assert.equal(nextButton.hidden, false);
+            assert.equal(nextButton.innerHTML, 'Next');
+            done();
+          });
+        });
+
+        test('when /welcome api call fails, it should hide next button and fire api-error event', (done) => {
+
+          apiStub.returns(Promise.reject('got error'));
+
+          const element = fixture('BasicTestFixture');
+          assert.equal(element.hide, true);
+          assert.equal(element.hideGreeting, true);
+          assert.equal(element.hideNextButton, true);
           assert.equal(element.greeting, '');
 
-          const elementShadowRoot = element.shadowRoot;
+          element.greet();
 
-          // const headingElement = elementShadowRoot.querySelector('h2');
-          // assert.equal(headingElement, true);
-          // assert.equal(headingElement.innerText, '');
-        });*/
+          element.addEventListener('api-error', function(event) {
+            assert.equal(event.detail, 'got error');
+            done();
+          });
+
+          flush(() => {
+            const elementShadowRoot = element.shadowRoot;
+
+            const mainDiv = elementShadowRoot.querySelector('div');
+            assert.equal(mainDiv.hidden, true);
+
+            const headingElement = elementShadowRoot.querySelector('#GreetingMessage');
+            assert.equal(headingElement.hidden, true);
+            assert.equal(headingElement.innerHTML, '');
+
+            const nextButton = elementShadowRoot.querySelector('#NextButton');
+            assert.equal(nextButton.hidden, true);
+            assert.equal(nextButton.innerHTML, 'Next');
+          });
+
+        });
 
       });
     </script>
