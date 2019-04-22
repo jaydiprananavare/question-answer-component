@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
@@ -11,33 +11,53 @@
     <script src="../node_modules/mocha/mocha.js"></script>
     <script src="../node_modules/chai/chai.js"></script>
     <script src="../node_modules/wct-mocha/wct-mocha.js"></script>
+    <script src="../node_modules/sinon/pkg/sinon.js"></script>
+
 
     <script type="module" src="../question-answer.js"></script>
-  </head>
-  <body>
+</head>
+<body>
 
-    <test-fixture id="BasicTestFixture">
-      <template>
+<test-fixture id="BasicTestFixture">
+    <template>
         <question-answer id="questionAnswer"></question-answer>
-      </template>
-    </test-fixture>
+    </template>
+</test-fixture>
 
-    <script type="module">
-      suite('question-answer component', () => {
+<script type="module">
+    import {APIHelper} from '../APIHelper.js'
 
-        test('instantiating the element should hide all sub components', () => {
-          const element = fixture('BasicTestFixture');
-          assert.equal(element.hide, true);
-          assert.equal(element.hideErrorMessage, true);
-          const elementShadowRoot = element.shadowRoot;
+    suite('question-answer component', () => {
 
-          const welcomeGreeting = elementShadowRoot.querySelector('#welcomeGreeting');
+        var apiStub;
 
-          //assert.equal(welcomeGreeting, '');
+        suiteSetup(() => {
+            apiStub = sinon.stub(APIHelper, 'getJsonResponse');
+        });
+
+        test('instantiating the element should hide all sub components', (done) => {
+            apiStub.returns(Promise.resolve({message: 'welcome to test demo'}));
+
+            const element = fixture('BasicTestFixture');
+            assert.equal(element.hide, true);
+            assert.equal(element.hideErrorMessage, true);
+
+            element.start();
+
+            flush(() => {
+                const elementShadowRoot = element.shadowRoot;
+
+                const welcomeShadowRoot = elementShadowRoot.querySelector('#welcomeGreeting').shadowRoot;
+
+                const headingElement = welcomeShadowRoot.querySelector('#GreetingMessage');
+                assert.equal(headingElement.innerHTML, 'welcome to test demo');
+                welcomeShadowRoot.querySelector('#NextButton').click();
+                done();
+            });
 
         });
-      });
-    </script>
+    });
+</script>
 
-  </body>
+</body>
 </html>
