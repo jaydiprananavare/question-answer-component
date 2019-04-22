@@ -6,8 +6,9 @@
 
 First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) and npm (packaged with [Node.js](https://nodejs.org)) installed. Run `npm install` to install your element's dependencies, then run `polymer serve` to serve your element locally.
 
-## Viewing Your Element
-
+## Viewing <question-answer> Element
+* Please start api application first https://github.com/jaydiprananavare/scala-api/blob/master/README.md
+* run below command to serve question answer-element
 ```
 $ polymer serve
 ```

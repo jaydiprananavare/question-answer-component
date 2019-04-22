@@ -8,11 +8,15 @@ class QuestionElement extends PolymerElement {
             :host {
                 display: block;
             }
+            .answer-div {
+                margin-top: 15px;
+                margin-bottom: 15px;
+            }
         </style>
         <div hidden$="[[hide]]">
             <input value="{{question::input}}" type="string">
             <button on-click="_fetchAnswer">submit</button>
-            <div id="AnswerDiv">
+            <div id="AnswerDiv" class="answer-div">
                 <label>[[answer]]</label>
             </div>
             <button id="NextButton" hidden$="[[hideNextButton]]" on-click="_dispatchNextButtonClicked">Next</button>
