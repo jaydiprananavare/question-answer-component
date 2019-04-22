@@ -25,7 +25,15 @@
 
 
     <script type="module">
+      import {APIHelper} from '../APIHelper.js'
+
       suite('question-element component', () => {
+
+        var apiStub;
+
+        suiteSetup(() => {
+          apiStub = sinon.stub(APIHelper, 'getJsonResponse');
+        });
 
         test('instantiating the element, should have empty input box and submit button', () => {
           const element = fixture('BasicTestFixture');
@@ -75,6 +83,60 @@
 
           element._handleError("got error from api");
           assert.equal(element.hideGreeting, true);
+        });
+
+        test('on calling clicking submit button, it should fetch and show answer for given question', (done) => {
+          apiStub.returns(Promise.resolve({answer: 'answer is 42'}));
+
+          const element = fixture('BasicTestFixture');
+          assert.equal(element.hide, true);
+          assert.equal(element.question, '');
+          assert.equal(element.hideNextButton, true);
+
+          const elementShadowRoot = element.shadowRoot;
+
+          const submitButton = elementShadowRoot.querySelector('button');
+          submitButton.click();
+
+          flush(() => {
+            const answerLable = elementShadowRoot.querySelector('label');
+            assert.equal(answerLable.hidden, false);
+            assert.equal(answerLable.innerHTML, 'answer is 42');
+
+            const nextButton = elementShadowRoot.querySelector('#NextButton');
+            assert.equal(nextButton.hidden, false);
+            assert.equal(nextButton.innerHTML, 'Next');
+            done();
+          });
+        });
+
+        test('when /query call fails, it should hide next button and fire api-error event', (done) => {
+          apiStub.returns(Promise.reject('got error'));
+
+          const element = fixture('BasicTestFixture');
+          assert.equal(element.hide, true);
+          assert.equal(element.question, '');
+          assert.equal(element.hideNextButton, true);
+
+          const elementShadowRoot = element.shadowRoot;
+
+          element.addEventListener('api-error', function(event) {
+            assert.equal(event.detail, 'got error');
+            done();
+          });
+
+          const submitButton = elementShadowRoot.querySelector('button');
+          submitButton.click();
+
+          flush(() => {
+            const answerLable = elementShadowRoot.querySelector('label');
+            assert.equal(answerLable.hidden, false);
+            assert.equal(answerLable.innerHTML, '');
+
+            const nextButton = elementShadowRoot.querySelector('#NextButton');
+            assert.equal(nextButton.hidden, true);
+            assert.equal(nextButton.innerHTML, 'Next');
+          });
         });
 
       });

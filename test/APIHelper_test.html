@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>APIHelper test</title>
+
+    <script src="../node_modules/mocha/mocha.js"></script>
+    <script src="../node_modules/chai/chai.js"></script>
+    <script src="../node_modules/wct-mocha/wct-mocha.js"></script>
+    <script src="../node_modules/sinon/pkg/sinon.js"></script>
+
+</head>
+<body>
+
+<script type="module">
+    import {APIHelper} from '../APIHelper.js'
+
+    suite('APIHelper', () => {
+
+        var fetchStub;
+
+        suiteSetup(() => {
+            fetchStub = sinon.stub(window, 'fetch');
+        });
+
+        function response(statusCode, statusText, body) {
+            return new window.Response(JSON.stringify(body), {
+                status: statusCode,
+                statusText: statusText,
+                headers: {'Content-type': 'application/json'}
+            });
+        }
+
+        test('should return promise of json response by calling given uri', function () {
+            fetchStub.returns(Promise.resolve(response(200, '', {message: 'welcome'})));
+
+            return APIHelper.getJsonResponse('/welcome').then((response) => assert.equal(response.message, 'welcome'))
+        });
+
+        test('should return promise of json response only when api response is >= 200 and < 300 calling given uri', function () {
+            fetchStub.returns(Promise.resolve(response(404, 'not found')));
+
+            return APIHelper.getJsonResponse('/query').catch((error) => assert.equal(error.message, 'not found'))
+        });
+
+    });
+</script>
+
+</body>
+</html>
